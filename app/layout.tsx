@@ -10,9 +10,12 @@ export const metadata: Metadata = {
     title: "The Table",
     statusBarStyle: "default",
   },
-  // app/apple-icon.tsx generates a fresh, cache-keyed iOS icon URL automatically.
-  // Do not point iOS at the old public/apple-touch-icon.png.
-  icons: { icon: "/table-favicon.svg" },
+  icons: {
+    icon: "/table-favicon.svg",
+    // An opaque 180x180 PNG adapted from the uploaded The Table icon.
+    // The unique path prevents iOS from retaining its older distorted icon.
+    apple: [{ url: "/table-apple-home-v3.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
