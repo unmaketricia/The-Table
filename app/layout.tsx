@@ -11,13 +11,12 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
   },
   icons: {
-    icon: "/table-favicon.svg",
-    // An opaque 180x180 PNG adapted from the uploaded The Table icon.
-    // The unique path prevents iOS from retaining its older distorted icon.
-    apple: [{ url: "/table-apple-home-v3.png", sizes: "180x180", type: "image/png" }],
+    icon: [{ url: "/table-blue-ivory-v5.svg", type: "image/svg+xml" }, { url: "/table-blue-ivory-v5-32.png", sizes: "32x32", type: "image/png" }],
+    apple: [{ url: "/table-blue-ivory-v5-180.png", sizes: "180x180", type: "image/png" }],
   },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <html lang="en"><body>{children}</body></html>;
 }
+
