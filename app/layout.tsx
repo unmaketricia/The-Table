@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "The Table",
-  description: "Your shared household menu and grocery list.",
+  description: "Plan meals and keep a grocery list in one place.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,

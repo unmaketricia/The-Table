@@ -12,10 +12,12 @@ Migrated from the latest ChatGPT Site source. Next.js on Vercel with server-side
 
 Copy `.env.example` to `.env.local`, configure `DATABASE_URL`, then run `npm ci` and `npm run dev`.
 
-## Access
+## Accounts and data
 
-Public viewing and editing, with no login, as requested.
+The app includes email and password registration, sign in, sign out, and a 30-day secure session cookie. Passwords are stored as scrypt hashes. Entries are scoped to the signed-in account. On the first registration after this migration, any existing unassigned entries are attached to that account; accounts registered afterward start with their own entries.
+
+The same account flow is available through `/api/auth/register`, `/api/auth/login`, `/api/auth/logout`, and `/api/auth/me`. Entry reads and writes at `/api/entries` require a valid session.
 
 ## Validation
 
-`npm run typecheck`, `npm run test:db`, and `npm run build`.
+`npm run typecheck` and `npm run build`.
