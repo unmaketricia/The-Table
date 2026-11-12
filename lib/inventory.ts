@@ -1,9 +1,8 @@
 export type Entry={id:string;kind:string;[key:string]:unknown};
-export const inventoryUnits=['packs','kg','g','pieces','portions'];
 export class InventoryError extends Error{}
 const rounded=(n:number)=>Math.round(n*1000)/1000;
 function quantity(value:unknown,positive=false){
- if(typeof value!=='number'||!Number.isFinite(value)||value<0||value>1000000||(positive&&value===0)||Math.abs(value-rounded(value))>0.0000001)throw new InventoryError('Enter a valid quantity with up to 3 decimal places.');
+ if(typeof value!=='number'||!Number.isInteger(value)||value<0||value>1000000||(positive&&value===0))throw new InventoryError('Enter a whole-number quantity. Each quantity is one cooking portion.');
  return value;
 }
 function allocation(e:Entry|undefined){
@@ -27,10 +26,9 @@ export function planInventoryChange(current:Entry[],items:Entry[],action:'save'|
   const item={...input};
   if(item.kind==='inventory'){
    if(typeof item.cut!=='string'||!item.cut.trim()||typeof item.meat!=='string'||!item.meat.trim())throw new InventoryError('Choose a protein and enter a variant / cut.');
-   if(!inventoryUnits.includes(String(item.unit)))throw new InventoryError('Choose a unit for the quantity.');
+   delete item.unit;
    quantity(item.stock);
    if(old&&(item.stockVersion??0)!==(old.stockVersion??0))throw new InventoryError('This stock has changed. Close the editor and reopen it to see the latest quantity.');
-   if(old&&item.unit!==old.unit&&current.some(e=>allocation(e)?.id===item.id))throw new InventoryError('This unit is used by a planned meal. Add a separate inventory item for a different unit.');
    item.cut=item.cut.trim();item.stockVersion=Number(old?.stockVersion??0)+1;
   }
   if(item.kind==='meal'&&item.favoriteTemplate){delete item.inventoryId;delete item.inventoryQuantity;}
