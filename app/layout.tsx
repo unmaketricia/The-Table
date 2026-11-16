@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./ui-refresh.css";
+import {Appearance} from "@/components/appearance";
 
 export const metadata: Metadata = {
   title: "The Table",
@@ -14,6 +16,6 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en"><body><Appearance>{children}</Appearance></body></html>;
 }
 
