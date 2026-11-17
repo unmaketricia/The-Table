@@ -63,6 +63,13 @@ export default function Login() {
     window.addEventListener('focus', expire); const timer = setInterval(expire, 60000);
     return () => { active = false; data.subscription.unsubscribe(); window.removeEventListener('focus', expire); clearInterval(timer); };
   }, []);
+  useEffect(() => {
+    // Wait for callback handling so password recovery and completed email changes
+    // finish before a restored or newly signed-in session leaves this page.
+    if (ready && session && mode !== 'reset' && !busy) {
+      window.location.replace(APP_BASE+'/account');
+    }
+  }, [ready, session, mode, busy]);
   function change(next: Mode) { M(next); P(''); C(''); N(''); }
   async function submit(event: React.FormEvent) {
     event.preventDefault(); const client = authClient(); if (!client || locked.current) return;
@@ -111,22 +118,13 @@ export default function Login() {
     const {error} = await client.auth.signInWithOAuth({provider, options:{redirectTo:window.location.origin+APP_BASE+'/login'}});
     if (error) { N(error.message); B(false); locked.current = false; }
   }
-  async function logout() {
-    const client = authClient(); if (!client || locked.current) return;
-    locked.current = true; B(true); const {error} = await client.auth.signOut();
-    if (error) N('Could not sign out. Please try again.'); else { S(null); P(''); C(''); N('Signed out.'); }
-    locked.current = false; B(false);
-  }
   const wait = mode === 'forgot' ? resetCooldown.remaining : mode === 'register' ? signupCooldown.remaining : 0;
   return <div className="table-shell"><main className="login-page">
     <a className="login-brand" href={APP_BASE}>The Table</a>
-    {!ready ? <div className="loading-rows" role="status" aria-label="Checking your session"><span/><span/></div> : <>
-      <h1>{session&&mode!=='reset'?'You’re signed in':mode==='register'?'Create your account':mode==='forgot'?'Reset your password':mode==='reset'?'Choose a new password':'Welcome back'}</h1>
+    {!ready||(session&&mode!=='reset') ? <div className="loading-rows" role="status" aria-label={ready?'Opening your account':'Checking your session'}><span/><span/></div> : <>
+      <h1>{mode==='register'?'Create your account':mode==='forgot'?'Reset your password':mode==='reset'?'Choose a new password':'Welcome back'}</h1>
       {!available&&<p className="auth-notice" role="status">Sign-in is unavailable. Please try again shortly.</p>}
-      {session&&mode!=='reset' ? <>
-        <p>{session.user.email}</p><p>Your account is ready. Your Table stays with this account if you change your login email.</p>
-        <div className="signed-in-actions"><a className="primary account-continue" href={APP_BASE+'/account'}>Continue to your account →</a><button type="button" className="signout-secondary" disabled={busy} onClick={()=>void logout()}>Sign out</button></div>
-      </> : <>
+      <>
         <form onSubmit={event=>void submit(event)}>
           {mode!=='reset'&&<label>Email address<input type="email" autoComplete="email" required value={email} onChange={event=>E(event.target.value)} disabled={busy}/></label>}
           {mode!=='forgot'&&<label>Password<input type="password" autoComplete={mode==='login'?'current-password':'new-password'} minLength={mode==='login'?undefined:12} required value={password} onChange={event=>P(event.target.value)} disabled={busy}/></label>}
@@ -137,7 +135,7 @@ export default function Login() {
         {(mode==='login'||mode==='register')&&<div className="verification-resend"><p>Need another verification email?</p><button type="button" disabled={busy||!available||signupCooldown.remaining>0} onClick={()=>void resendVerification()}>{signupCooldown.remaining>0?`Resend in ${signupCooldown.remaining}s`:'Resend verification email'}</button></div>}
         {mode==='login'&&<><div className="auth-links"><button type="button" disabled={busy} onClick={()=>change('forgot')}>Forgot password?</button><button type="button" disabled={busy} onClick={()=>change('register')}>Create account</button></div>{(['google','facebook'] as const).filter(provider=>loginProviders[provider]).map(provider=><button className="social-login" key={provider} disabled={busy||!available} onClick={()=>void social(provider)}>Continue with {provider==='google'?'Google':'Facebook'}</button>)}</>}
         {mode!=='login'&&<button type="button" disabled={busy} onClick={()=>change('login')}>Back to sign in</button>}
-      </>}
+      </>
       {message&&<p className="auth-message" role="status">{message}</p>}
     </>}
   </main></div>;
