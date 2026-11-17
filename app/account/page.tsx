@@ -2,6 +2,7 @@
 import '../login/login.css';
 import './account.css';
 import {useEffect,useState} from 'react';
+import {AccountSecurity} from '@/components/account-security';
 import {authClient} from '@/commercial/auth';
 import {APP_BASE,buyerFetch} from '@/commercial/api';
 type Account={paid:boolean;owner:boolean;members:{userId:string}[]};
@@ -43,6 +44,7 @@ export default function Account(){
     {account.members.length>0&&<ul className="household-members">{account.members.map((m,index)=><li key={m.userId}><span>Household member {index+1}</span><button type="button" className="account-secondary" disabled={busy} onClick={()=>void manage('remove',m.userId)}>Remove</button></li>)}</ul>}
    </section>}
   </>:account&&<section className="account-section"><h2>Get The Table</h2><p>One purchase gives your household access to The Table.</p><a className="primary account-continue" href="/table#purchase">Buy The Table — $12 one time</a></section>}
+  <AccountSecurity/>
   <footer className="account-footer"><a href="/studio/contact">Contact support</a><button type="button" className="signout-secondary" onClick={async()=>{await authClient()?.auth.signOut();location.href=APP_BASE+'/login'}}>Sign out</button></footer>
  </main></div>
 }
