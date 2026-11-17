@@ -10,7 +10,7 @@ export default function Invite(){
   const response=await buyerFetch('/api/household',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'accept',token:value})});
   const result=await response.json();if(!response.ok)throw Error(result.error);
   try{localStorage.removeItem('table-pending-invite')}catch{}
-  window.location.replace(APP_BASE+'/account');
+  window.location.replace(APP_BASE);
  }
  useEffect(()=>{
   let active=true;

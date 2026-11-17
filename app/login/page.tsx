@@ -68,7 +68,8 @@ export default function Login() {
     // Wait for callback handling so password recovery and completed email changes
     // finish before a restored or newly signed-in session leaves this page.
     if (ready && session && mode !== 'reset' && !busy) {
-      window.location.replace(APP_BASE+'/account');
+      let invite=false;try{invite=/^[a-f0-9]{64}$/.test(localStorage.getItem('table-pending-invite')||'')}catch{}
+      window.location.replace(invite?APP_BASE+'/account':APP_BASE);
     }
   }, [ready, session, mode, busy]);
   function change(next: Mode) { M(next); P(''); C(''); N(''); }

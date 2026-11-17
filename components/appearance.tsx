@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useRef,useState,type CSSProperties,type ReactNode} from 'react';
+import {usePathname} from 'next/navigation';
 import {authClient} from '@/commercial/auth';
 import {APP_BASE,buyerFetch} from '@/commercial/api';
 import {HouseholdContext} from '@/commercial/context';
@@ -7,6 +8,7 @@ import {SETTINGS_ID,readSettings,validateSettings} from '@/commercial/settings-v
 import {accessibleAccent,configureSettings,contrastInk,defaultMealSlots,defaultSettings,defaultTableDisplay,getTableDisplay,palettes,tableAreas,tableLabels,type Settings,type TableArea} from '@/commercial/settings';
 
 export function Appearance({children}:{children:ReactNode}){
+ const welcomeRoute=usePathname().endsWith('/welcome');
  const [settings,S]=useState<Settings>(defaultSettings),[draft,D]=useState<Settings>(defaultSettings),[open,O]=useState(false),[ready,R]=useState(false),[busy,B]=useState(false),[error,E]=useState(''),[paid,P]=useState(false);
  const current=useRef(settings),version=useRef(0),editing=useRef(false),locked=useRef(false);current.current=settings;editing.current=open;
  const display=getTableDisplay(settings),preview=getTableDisplay(open?draft:settings);
@@ -32,12 +34,13 @@ export function Appearance({children}:{children:ReactNode}){
   const d=getTableDisplay(clean);try{localStorage.setItem('the-table-appearance',JSON.stringify({accent:d.accent,surface:d.surface,compact:d.density==='compact'}));}catch{}configureSettings(clean);S(clean);current.current=clean;return true;
  }catch(e){E(e instanceof Error?e.message:'Could not save customization.');return false}finally{locked.current=false;B(false)}}
  async function addMenu(name:string){const s=current.current;if(!name.trim()||s.menuProfiles.length>=12)return null;const id=crypto.randomUUID(),d=getTableDisplay(s);const next={...s,menuProfiles:[...s.menuProfiles,{id,name:name.trim()}],tableDisplay:{...d,homeSections:d.homeSections.includes('additional')?d.homeSections:[...d.homeSections,'additional' as TableArea]}};return await save(next)?id:null;}
+ async function choosePalette(accent:string,surface:string){const s=current.current;return save({...s,tableDisplay:{...getTableDisplay(s),accent,surface}})}
  function changeDisplay(change:Partial<typeof display>){D(s=>({...s,tableDisplay:{...getTableDisplay(s),...change}}))}
  function toggle(area:TableArea,key:'homeSections'|'pins'){const values=preview[key],next=values.includes(area)?values.filter(x=>x!==area):[...values,area];if(key==='pins'&&next.length>3)return;changeDisplay({[key]:next})}
  const accent=preview.accent,surface=preview.surface,ink=contrastInk(accent),title=accessibleAccent(accent);
  const style={'--table-accent':accent,'--table-accent-ink':ink,'--table-title':title,'--table-surface':surface,'--brand-blue':accent,'--brand-ivory':ink,'--brand-soft':surface,'--brand-focus':title,'--brand-title':title,'--brand-ink':'#29332f','--brand-muted':'#666b64','--brand-border':'#dedfd8','--ink':'#29332f','--muted':'#666b64','--line':'#dedfd8'} as CSSProperties;
- return <HouseholdContext.Provider value={{workspace:{settings},ready,demo:false,openAccount:openCustomize,addMenu}}><div className={'table-shell density-'+preview.density} style={style}>
-  <div className="appearance-toolbar"><button type="button" onClick={openCustomize}>Customize</button><a href={APP_BASE+'/account'}>Your Account</a></div>
+ return <HouseholdContext.Provider value={{workspace:{settings},ready,demo:false,openAccount:openCustomize,addMenu,choosePalette}}><div className={'table-shell density-'+preview.density} style={style}>
+  {!welcomeRoute&&<div className="appearance-toolbar"><button type="button" onClick={openCustomize}>Customize</button><a href={APP_BASE+'/account'}>Your Account</a></div>}
   {children}
   {error&&!open&&<p className="customization-error" role="alert">{error} <button type="button" onClick={()=>location.reload()}>Retry</button></p>}
   {open&&<div className="overlay"><section className="dialog customization-dialog" role="dialog" aria-modal="true" aria-labelledby="customize-title">

@@ -11,7 +11,7 @@ export default function BuyerGate({children}:{children:ReactNode}){
    const {data}=await client.auth.getSession();if(!data.session){window.location.replace(APP_BASE+'/login');return}
    const r=await buyerFetch('/api/account');const account=await r.json();
    if(!r.ok)throw new Error(account.error);
-   if(active){P(account.paid);S(account.paid?'':'Your account is ready. Purchase The Table to open your private household.')}
+   if(active){if(!account.paid){window.location.replace(APP_BASE+'/account?continue=1');return}if(!account.welcomeSeen){window.location.replace(APP_BASE+'/welcome');return}P(true);S('')}
   }catch(e){if(active){P(false);S(e instanceof Error?e.message:'Unable to check access.')}}
  }
  void check();timer=setInterval(check,5000);return()=>{active=false;if(timer)clearInterval(timer)}
