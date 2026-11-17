@@ -4,3 +4,18 @@
 .account-page .account-start{display:grid;gap:16px;margin:0 0 44px}.install-details summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:14px 16px;border:1px solid var(--brand-border);border-radius:6px;background:var(--brand-soft);color:var(--brand-ink);font-weight:600;line-height:1.4;cursor:pointer;list-style:none}.install-details summary::-webkit-details-marker{display:none}.install-details summary:focus-visible{outline:3px solid var(--brand-focus);outline-offset:3px}.install-details summary>span{transition:transform .15s}.install-details[open] summary>span{transform:rotate(180deg)}.install-instructions{padding:4px 16px 16px}.install-instructions>p{margin:16px 0;line-height:1.6}.account-page .account-start+.account-section{margin-top:0;padding-top:28px}.account-section form{gap:24px}.account-section form input{margin-top:0}.account-section form>button{width:100%;min-height:48px}.invitation-notice{margin:20px 0;line-height:1.6}@media(prefers-reduced-motion:reduce){.install-details summary>span{transition:none}}
 
 .account-security p{line-height:1.6;overflow-wrap:anywhere}.account-security .account-note{margin:0;font-weight:400}.pending-email{margin:20px 0;padding:16px;border:1px solid var(--brand-border);border-radius:8px;background:var(--brand-soft)}.pending-email p{margin:0 0 12px}.password-reset-action{margin-top:28px}.table-shell .password-reset-action h3{font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;margin:0 0 8px}.password-reset-action p{margin:0 0 16px}.security-notice{padding:16px;border-left:3px solid var(--brand-blue);background:var(--brand-soft);margin:20px 0 0}
+
+/* Center the account setup and household controls. */
+.account-page{text-align:center}
+.account-page input{text-align:center}
+.account-page .install-details summary{position:relative;justify-content:center;text-align:center;padding-left:44px;padding-right:44px}
+.account-page .install-details summary>span{position:absolute;right:16px}
+.account-page .phone-instructions ol{padding-left:0;list-style-position:inside}
+.account-page .household-members li{justify-content:center;flex-wrap:wrap}
+.account-page .account-footer{justify-content:center;flex-wrap:wrap}
+/* Account security lives inside Settings alongside appearance controls. */
+.appearance-dialog .account-security{margin-top:28px;padding-bottom:0}
+.appearance-dialog .account-security form{display:grid;gap:16px}
+.appearance-dialog .account-security form>button{width:100%}
+.appearance-dialog .account-security .account-note{font-size:14px;line-height:1.6}
+.appearance-dialog .account-security input{margin-top:8px}
