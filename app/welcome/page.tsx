@@ -47,7 +47,7 @@ export default function Welcome(){
   catch(e){M(e instanceof Error?e.message:'Could not save this color.');}
   finally{locked.current=false;B(false)}
  }
- return <main className="login-page account-page welcome-page" style={preview?{'--accent':display.accent,'--surface':display.surface} as CSSProperties:undefined}>
+ return <main className="login-page account-page welcome-page" style={preview?{'--table-accent':display.accent,'--table-accent-ink':'#ffffff','--table-title':display.accent,'--table-surface':display.surface,'--brand-blue':display.accent,'--brand-ivory':'#ffffff','--brand-soft':display.surface,'--brand-title':display.accent,'--brand-focus':display.accent} as CSSProperties:undefined}>
   {!ready?<><p role="status">{message||'Getting your Table ready…'}</p>{message&&<button type="button" onClick={()=>location.reload()}>Try again</button>}</>:<>
    <h1>Your Table is ready.</h1>
    <button type="button" className="primary account-continue" disabled={busy} onClick={()=>void openTable()}>Open The Table</button>
