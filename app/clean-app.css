@@ -84,8 +84,9 @@ h3{font-size:18px;line-height:1.3}
 .slot-dish em{color:var(--muted);font-style:normal}
 .slot-dish small{display:block;color:var(--muted);white-space:pre-wrap}
 .slot-details{grid-column:2;display:block;margin-top:6px;min-width:0;font-size:12px;font-variant-numeric:tabular-nums}
-.slot-ingredient{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+.slot-ingredient{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:8px;min-width:0}
 .meal-ingredient,.meal-availability{display:block;width:max-content;max-width:100%;padding:4px 8px;border-radius:6px;background:var(--table-surface);color:var(--ink);font-size:12px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.meal-ingredient{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.meal-availability{flex-shrink:0;white-space:nowrap}
 .week-hint,.section-note,.reorder-hint{color:var(--muted);font-size:14px}
 .empty{margin:20px 0;padding:28px 20px;border:1px solid var(--line);border-radius:6px;color:var(--muted);text-align:left}
 .empty p{margin:8px 0 16px}
