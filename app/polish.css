@@ -18,8 +18,13 @@
 .table-shell .home-section-copy strong{font-size:24px}
 .table-shell .home-section-icon{color:var(--table-title)}
 .table-shell .today-meal{font-weight:400;min-height:28px;line-height:1.2;padding-top:4px;padding-bottom:4px}
-.table-shell .week-bar{border-radius:12px;padding:14px 16px}
-.table-shell .week-bar button{background:transparent;border:0;padding:8px 12px;color:var(--table-title)}
+.table-shell .week-bar{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;border-radius:12px;padding:16px;background:var(--table-surface)}
+.table-shell .week-bar>strong{font-size:15px;line-height:1.4;text-align:left}
+.table-shell .week-bar .week-navigation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.table-shell .week-bar .week-navigation button{min-width:0;min-height:44px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:10px 6px;color:var(--table-title);font-size:14px;font-weight:500;line-height:1.2;white-space:nowrap}
+.table-shell .week-bar .week-navigation button[aria-current=date]{background:var(--table-accent);color:var(--table-accent-ink);border-color:var(--table-accent)}
+.table-shell .week-bar .week-navigation button:hover{filter:brightness(.97)}
+@media(max-width:760px){.table-shell .week-bar .week-navigation button{font-size:clamp(11px,3vw,14px);padding:10px 4px}.table-shell .week-bar{padding:14px 12px}}
 .table-shell .week-list,.table-shell .inventory-list,.table-shell .grocery-list{border-radius:12px}
 .table-shell .day-heading{font-weight:500}
 .table-shell .meal-slot{padding-top:12px;padding-bottom:12px}
