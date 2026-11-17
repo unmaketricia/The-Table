@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {invitationUrl,invitationEmail,sendInvitation} from '../supabase/functions/table-household/invitation.mjs';
 const token='a'.repeat(64);
 test('invitation contains a fixed-origin household link and no signup auto-login token',()=>{
- assert.equal(invitationUrl(token),'https://www.un-make.com/table/app/login?invite='+token);
+ assert.equal(invitationUrl(token),'https://www.un-make.com/table/app/invite?token='+token);
  const email=invitationEmail(token);assert.ok(email.html.includes('Accept invitation'));assert.ok(email.text.includes('seven days'));assert.ok(email.html.includes(invitationUrl(token)));
  assert.throws(()=>invitationUrl('javascript:alert(1)'));
 });

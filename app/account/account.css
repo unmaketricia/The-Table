@@ -15,3 +15,6 @@
 .account-page .account-footer{justify-content:center;flex-wrap:wrap}
 
 .account-page #household-heading{margin-bottom:4px;line-height:1.2}.account-page #household-heading+p{margin-top:0;line-height:1.2}
+
+.household-members li { flex-wrap:wrap; gap:12px; }
+.household-members li span,.household-email { overflow-wrap:anywhere; min-width:0; }

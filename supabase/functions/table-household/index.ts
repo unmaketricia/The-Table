@@ -1,13 +1,32 @@
 import {sendInvitation} from './invitation.mjs';
+import {invitationSignup} from './signup.mjs';
+import {householdContacts,leaveHousehold} from './operations.mjs';
 Deno.serve(async(request:Request)=>{
  if(request.method!=="POST")return Response.json({error:"Method not allowed"},{status:405});
  const url=Deno.env.get("SUPABASE_URL")!,service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,authorization=request.headers.get("Authorization")||"";
+ const raw=await request.text();if(raw.length>4096)return Response.json({error:"Request too large"},{status:413});
+ let body;try{body=JSON.parse(raw)}catch{return Response.json({error:"Invalid request"},{status:400})}
+ if(!body||typeof body!=="object")return Response.json({error:"Invalid request"},{status:400});
+ if(["preview","register"].includes(body.action)){
+  try{const result=await invitationSignup(body,url,service);return Response.json(result.data,{status:result.status,headers:{"Cache-Control":"no-store"}});}
+  catch{return Response.json({error:"Unable to check this invitation. Please try again."},{status:503});}
+ }
  if(!authorization.startsWith("Bearer "))return Response.json({error:"Sign in first"},{status:401});
  const userResponse=await fetch(url+"/auth/v1/user",{headers:{Authorization:authorization,apikey:Deno.env.get("SUPABASE_ANON_KEY")!}});
  if(!userResponse.ok)return Response.json({error:"Please sign in again"},{status:401});
  const user=await userResponse.json();if(!user.email_confirmed_at)return Response.json({error:"Confirm your email first"},{status:403});
- const raw=await request.text();if(raw.length>4096)return Response.json({error:"Request too large"},{status:413});
- let body;try{body=JSON.parse(raw)}catch{return Response.json({error:"Invalid request"},{status:400})}
+ if(body.action==="details"){
+  try{
+   const accountResponse=await fetch(url+"/rest/v1/rpc/table_account",{method:"POST",headers:{Authorization:authorization,apikey:Deno.env.get("SUPABASE_ANON_KEY")!,"Content-Type":"application/json"},body:"{}"});
+   if(!accountResponse.ok)throw Error("Unable to access this household");
+   const contacts=await householdContacts(url,service,user,await accountResponse.json());
+   return Response.json(contacts,{headers:{"Cache-Control":"no-store"}});
+  }catch{return Response.json({error:"Unable to load household details."},{status:503});}
+ }
+ if(body.action==="leave"){
+  const ok=await leaveHousehold(url,service,user.id);
+  return Response.json(ok?{ok:true}:{error:"Unable to leave this household. Please try again."},{status:ok?200:503});
+ }
  if(!["invite","accept","remove"].includes(body.action))return Response.json({error:"Invalid action"},{status:400});
  if(body.action==="invite"&&(typeof body.email!=="string"||body.email.length>254||!/^\S+@\S+\.\S+$/.test(body.email)))return Response.json({error:"Enter a valid email"},{status:400});
  const resendKey=Deno.env.get("RESEND_API_KEY");

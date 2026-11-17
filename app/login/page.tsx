@@ -18,7 +18,8 @@ export default function Login() {
     const pendingInvite=query.get('invite');
     if(pendingInvite&&/^[a-f0-9]{64}$/.test(pendingInvite)) {
       try {localStorage.setItem('table-pending-invite',pendingInvite);} catch {}
-      N('You’ve been invited to a household. Sign in or create an account with the invited email address.');
+      window.location.replace(APP_BASE+'/invite?token='+encodeURIComponent(pendingInvite));
+      return;
     }
     const callback = new URLSearchParams(window.location.hash.slice(1));
     const emailChangeFlow = query.get('emailChange') === '1' || callback.get('type') === 'email_change';
