@@ -17,5 +17,5 @@ export default function BuyerGate({children}:{children:ReactNode}){
  void check();timer=setInterval(check,5000);return()=>{active=false;if(timer)clearInterval(timer)}
  },[]);
  if(!paid)return <main className="table-shell" style={{padding:'3rem',maxWidth:'42rem',margin:'auto'}}><h1>The Table</h1><p role="status">{status}</p><p><a href={APP_BASE+'/account'}>Your account</a> · <a href="/table#purchase">Purchase access</a></p></main>;
- return <><div style={{textAlign:'right',padding:'0.5rem 1.5rem'}}><a href={APP_BASE+'/account'}>Your account & household</a></div>{children}</>;
+ return <>{children}</>;
 }
