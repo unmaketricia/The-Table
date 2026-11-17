@@ -58,3 +58,6 @@
 .table-shell .login-page .auth-links button{border:0;background:transparent;color:var(--table-title)}
 .table-shell .density-compact .meal-slot{min-height:48px;padding-top:6px;padding-bottom:6px}
 @media(max-width:760px){.table-shell .appearance-toolbar{padding:10px 16px}.table-shell .appearance-toolbar button,.table-shell .appearance-toolbar a{padding:9px 14px}.table-shell .today-menu{padding:18px}.table-shell .dialog{padding:20px}.customization-actions{bottom:-20px}.customization-dialog .palette-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.table-shell .home-section{padding:16px 0}.table-shell .home-section-copy strong{font-size:22px}}
+
+.bottom-nav .nav-label{display:block;line-height:1.2;text-align:center}
+@media(max-width:760px){.table-shell .bottom-nav button{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:20px minmax(2.4em,auto);align-content:start;align-items:start;justify-items:center;gap:6px;padding:6px 2px}.table-shell .bottom-nav button>svg{grid-row:1;align-self:center;margin:0}.table-shell .bottom-nav .nav-label{grid-row:2;width:100%;min-width:0}}
