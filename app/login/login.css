@@ -3,3 +3,33 @@
 .signed-in-actions{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:24px}.login-page .account-continue{min-height:48px;padding:14px 16px;border:1px solid var(--brand-blue);border-radius:6px;text-align:center;text-decoration:none;font-weight:700;line-height:1.4}.account-continue:hover{filter:brightness(.95)}.account-continue:focus-visible{outline:3px solid var(--brand-focus);outline-offset:3px}.login-page .signout-secondary{width:auto;min-height:44px;padding:8px 16px;background:transparent;border:0;color:var(--brand-muted);font-size:14px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
 
 .verification-resend{margin:24px 0;padding:16px;border:1px solid var(--brand-border);border-radius:8px}.verification-resend p{margin:0 0 12px;font-size:14px;line-height:1.5}.verification-resend button{width:100%;font-size:14px;min-height:44px}.login-page .auth-message{margin-top:20px;line-height:1.6;padding:14px;border-left:3px solid var(--brand-blue);background:var(--brand-soft)}
+
+/* Keep feedback calm, readable, and in the household's chosen palette. */
+.password-fields{display:grid;gap:16px;min-width:0}
+.password-field{display:grid;gap:8px;min-width:0}
+.table-shell .password-field>label{margin:0}
+.password-control{display:grid;grid-template-columns:minmax(0,1fr) 58px;align-items:center;border:1px solid var(--line);border-radius:8px;background:white}
+.password-control:focus-within{outline:2px solid var(--table-title);outline-offset:2px}
+.table-shell .password-control input:not([type=checkbox]){min-width:0;width:100%;margin:0;border:0;background:transparent;box-shadow:none;outline:0}
+.table-shell .password-control .password-visibility{min-width:44px;min-height:44px;margin:0 4px 0 0;padding:8px 4px;border:0;border-radius:6px;background:transparent;color:var(--table-title);font:inherit;font-size:13px;line-height:1}
+.table-shell .password-visibility:focus-visible{outline:2px solid var(--table-title);outline-offset:-3px}
+.password-feedback{display:grid;gap:6px}
+.password-length-track{height:3px;border-radius:3px;overflow:hidden;background:var(--line)}
+.password-length-track>span{display:block;height:100%;border-radius:inherit;background:var(--table-title);transition:width 120ms ease-out}
+.password-feedback-line{display:flex;align-items:baseline;justify-content:space-between;gap:12px;min-height:22px;font-size:12px;line-height:1.5;color:var(--muted)}
+.password-count{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.password-match{min-height:22px;font-size:12px;line-height:1.5;color:var(--table-title)}
+.table-shell .field-error{color:#894B39}
+.password-control[data-invalid=true]{border-color:#894B39}
+.auth-status{min-height:64px;overflow-wrap:anywhere}
+.login-page .auth-status .auth-message{margin:20px 0 0}
+.auth-skeleton{min-height:360px}
+.auth-skeleton>div{display:grid;gap:20px}
+.auth-skeleton span:not(.sr-only){display:block;border-radius:8px;background:var(--table-surface)}
+.auth-skeleton-heading{height:42px;width:75%;margin-bottom:4px}
+.auth-skeleton-copy{height:44px;width:90%}
+.auth-skeleton-field{height:76px;width:100%}
+.auth-skeleton-button{height:46px;width:100%;border-radius:999px!important}
+@media(prefers-reduced-motion:reduce){.password-length-track>span{transition:none}}
+
+.table-shell .password-control input:not([type=checkbox]){font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:16px;letter-spacing:0}

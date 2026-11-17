@@ -1,5 +1,7 @@
 'use client';
 import './login.css';
+import {PasswordFields} from '@/components/password-fields';
+import {AuthSkeleton} from '@/components/auth-skeleton';
 import {APP_BASE} from '@/commercial/api';
 import {useEffect, useRef, useState} from 'react';
 import {authClient, loginProviders} from '@/commercial/auth';
@@ -123,22 +125,21 @@ export default function Login() {
   const wait = mode === 'forgot' ? resetCooldown.remaining : mode === 'register' ? signupCooldown.remaining : 0;
   return <div className="table-shell"><main className="login-page">
     <a className="login-brand" href={APP_BASE}>The Table</a>
-    {!ready||(session&&mode!=='reset') ? <div className="loading-rows" role="status" aria-label={ready?'Opening your account':'Checking your session'}><span/><span/></div> : <>
+    {!ready||(session&&mode!=='reset') ? <AuthSkeleton label={ready?'Opening The Table':'Checking your session'}/> : <>
       <h1>{mode==='register'?'Create your account':mode==='forgot'?'Reset your password':mode==='reset'?'Choose a new password':'Welcome back'}</h1>
       {!available&&<p className="auth-notice" role="status">Sign-in is unavailable. Please try again shortly.</p>}
       <>
-        <form onSubmit={event=>void submit(event)}>
+        <form aria-busy={busy} onSubmit={event=>void submit(event)}>
           {mode!=='reset'&&<label>Email address<input type="email" autoComplete="email" required value={email} onChange={event=>E(event.target.value)} disabled={busy}/></label>}
-          {mode!=='forgot'&&<label>Password<input type="password" autoComplete={mode==='login'?'current-password':'new-password'} minLength={mode==='login'?undefined:12} required value={password} onChange={event=>P(event.target.value)} disabled={busy}/></label>}
-          {(mode==='register'||mode==='reset')&&<label>Confirm password<input type="password" autoComplete="new-password" minLength={12} required value={confirmation} onChange={event=>C(event.target.value)} disabled={busy}/></label>}
+          {mode!=='forgot'&&<PasswordFields key={mode} mode={mode==='login'?'login':'create'} password={password} confirmation={confirmation} onPassword={P} onConfirmation={C} disabled={busy}/>}
           {mode==='login'&&<p className="settings-note">You’ll stay signed in on this browser until you sign out. Sign out when using a shared device.</p>}
-          <button type="submit" className="primary" disabled={busy||!available||wait>0}>{busy?'Please wait…':wait>0?`Try again in ${wait}s`:mode==='register'?'Create account':mode==='forgot'?'Send reset link':mode==='reset'?'Update password':'Sign in'}</button>
+          <button type="submit" className="primary" disabled={busy||!available||wait>0}>{busy?(mode==='register'?'Creating your account…':mode==='forgot'?'Sending reset link…':mode==='reset'?'Updating password…':'Signing in…'):wait>0?`Try again in ${wait}s`:mode==='register'?'Create account':mode==='forgot'?'Send reset link':mode==='reset'?'Update password':'Sign in'}</button>
         </form>
         {(mode==='login'||mode==='register')&&<div className="verification-resend"><p>Need another verification email?</p><button type="button" disabled={busy||!available||signupCooldown.remaining>0} onClick={()=>void resendVerification()}>{signupCooldown.remaining>0?`Resend in ${signupCooldown.remaining}s`:'Resend verification email'}</button></div>}
         {mode==='login'&&<><div className="auth-links"><button type="button" disabled={busy} onClick={()=>change('forgot')}>Forgot password?</button><button type="button" disabled={busy} onClick={()=>change('register')}>Create account</button></div>{(['google','facebook'] as const).filter(provider=>loginProviders[provider]).map(provider=><button className="social-login" key={provider} disabled={busy||!available} onClick={()=>void social(provider)}>Continue with {provider==='google'?'Google':'Facebook'}</button>)}</>}
         {mode!=='login'&&<button type="button" disabled={busy} onClick={()=>change('login')}>Back to sign in</button>}
       </>
-      {message&&<p className="auth-message" role="status">{message}</p>}
+      <div className="auth-status" role="status" aria-live="polite">{message&&<p className="auth-message">{message}</p>}</div>
     </>}
   </main></div>;
 }
