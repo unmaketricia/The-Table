@@ -16,7 +16,6 @@ export default function Account(){
  }catch(e){if(active)M(e instanceof Error?e.message:'Could not load your account')}}void refresh();const timer=setInterval(refresh,5000);return()=>{active=false;clearInterval(timer)}},[]);
  async function manage(action:string,userId?:string){B(true);try{const r=await buyerFetch('/api/household',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,email,userId})});const d=await r.json();if(!r.ok)throw Error(d.error);if(d.emailSent){E('');N('Invitation email sent to '+email+'. The link expires in seven days.')}else N('Household updated.')}catch(e){N(e instanceof Error?e.message:'Could not update household')}finally{B(false)}}
  return <div className="table-shell"><main className="login-page account-page">
-  <a className="login-brand" href={APP_BASE}>The Table</a>
   <h1>{account?.paid?'Your Table is ready.':'Your account'}</h1>
   {message&&<p className="account-status" role="status">{message}</p>}
   {account?.paid?<>
