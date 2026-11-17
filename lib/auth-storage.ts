@@ -1,8 +1,23 @@
-export const REMEMBER_DAYS=30;
-const lifetime=REMEMBER_DAYS*24*60*60*1000;
-type Saved={value:string;expiresAt:number;sessionId:string};
-function identity(value:string){try{const token=JSON.parse(value).access_token as string;return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).session_id as string}catch{return ''}}
-export function rememberedStorage(storage:Pick<Storage,'getItem'|'setItem'|'removeItem'>,now=()=>Date.now()){
- function read(key:string):Saved|null{try{const value=JSON.parse(storage.getItem(key)||'null') as Saved|null;if(value&&typeof value.value==='string'&&typeof value.expiresAt==='number'&&value.expiresAt>now())return value;storage.removeItem(key);return null}catch{storage.removeItem(key);return null}}
- return {getItem(key:string){return read(key)?.value??null},setItem(key:string,value:string){const previous=read(key),sessionId=identity(value);const expiresAt=previous&&sessionId&&previous.sessionId===sessionId?previous.expiresAt:now()+lifetime;storage.setItem(key,JSON.stringify({value,expiresAt,sessionId}))},removeItem(key:string){storage.removeItem(key)}};
+type BrowserStorage = Pick<Storage, 'getItem'|'setItem'|'removeItem'>;
+/** Keep the SDK's refreshable session without an app-imposed expiry. */
+export function persistentAuthStorage(storage: BrowserStorage) {
+  return {
+    getItem(key: string) {
+      const raw = storage.getItem(key);
+      if (!raw) return raw;
+      try {
+        const previous = JSON.parse(raw);
+        // Upgrade sessions saved by the old 30-day adapter without signing users out.
+        // Supabase still validates and refreshes the underlying session normally.
+        if (previous && typeof previous.value === 'string' &&
+            typeof previous.expiresAt === 'number' && typeof previous.sessionId === 'string') {
+          try { storage.setItem(key, previous.value); } catch {}
+          return previous.value;
+        }
+      } catch { /* Auxiliary SDK values can be plain strings. */ }
+      return raw;
+    },
+    setItem(key: string, value: string) { storage.setItem(key, value); },
+    removeItem(key: string) { storage.removeItem(key); },
+  };
 }

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: "The Table",
     statusBarStyle: "default",
   },
-  icons:{icon:[{url:'/table/app/table-home-palette-v6.ico'},{url:'/table/app/table-home-palette-v6-32.png',sizes:'32x32',type:'image/png'}],apple:[{url:'/table/app/table-home-palette-v6-180.png',sizes:'180x180',type:'image/png'}]},
+  icons:{icon:[{url:'/table/app/favicon-kalam.svg',type:'image/svg+xml'},{url:'/table/app/the-table-kalam.ico'},{url:'/table/app/the-table-kalam-32.png',sizes:'32x32',type:'image/png'}],apple:[{url:'/table/app/the-table-kalam-180.png',sizes:'180x180',type:'image/png'}]},
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

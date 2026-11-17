@@ -126,7 +126,7 @@ export default function Login() {
           {mode!=='reset'&&<label>Email address<input type="email" autoComplete="email" required value={email} onChange={event=>E(event.target.value)} disabled={busy}/></label>}
           {mode!=='forgot'&&<label>Password<input type="password" autoComplete={mode==='login'?'current-password':'new-password'} minLength={mode==='login'?undefined:12} required value={password} onChange={event=>P(event.target.value)} disabled={busy}/></label>}
           {(mode==='register'||mode==='reset')&&<label>Confirm password<input type="password" autoComplete="new-password" minLength={12} required value={confirmation} onChange={event=>C(event.target.value)} disabled={busy}/></label>}
-          {mode==='login'&&<p className="settings-note">Stay signed in for up to 30 days on this browser. Sign out when using a shared device.</p>}
+          {mode==='login'&&<p className="settings-note">You’ll stay signed in on this browser until you sign out. Sign out when using a shared device.</p>}
           <button type="submit" className="primary" disabled={busy||!available||wait>0}>{busy?'Please wait…':wait>0?`Try again in ${wait}s`:mode==='register'?'Create account':mode==='forgot'?'Send reset link':mode==='reset'?'Update password':'Sign in'}</button>
         </form>
         {(mode==='login'||mode==='register')&&<div className="verification-resend"><p>Need another verification email?</p><button type="button" disabled={busy||!available||signupCooldown.remaining>0} onClick={()=>void resendVerification()}>{signupCooldown.remaining>0?`Resend in ${signupCooldown.remaining}s`:'Resend verification email'}</button></div>}
