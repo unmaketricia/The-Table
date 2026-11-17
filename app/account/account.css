@@ -13,9 +13,5 @@
 .account-page .phone-instructions ol{padding-left:0;list-style-position:inside}
 .account-page .household-members li{justify-content:center;flex-wrap:wrap}
 .account-page .account-footer{justify-content:center;flex-wrap:wrap}
-/* Account security lives inside Settings alongside appearance controls. */
-.appearance-dialog .account-security{margin-top:28px;padding-bottom:0}
-.appearance-dialog .account-security form{display:grid;gap:16px}
-.appearance-dialog .account-security form>button{width:100%}
-.appearance-dialog .account-security .account-note{font-size:14px;line-height:1.6}
-.appearance-dialog .account-security input{margin-top:8px}
+
+.account-page #household-heading{margin-bottom:4px;line-height:1.2}.account-page #household-heading+p{margin-top:0;line-height:1.2}
