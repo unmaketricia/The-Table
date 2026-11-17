@@ -61,3 +61,5 @@
 
 .bottom-nav .nav-label{display:block;line-height:1.2;text-align:center}
 @media(max-width:760px){.table-shell .bottom-nav button{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:20px minmax(2.4em,auto);align-content:start;align-items:start;justify-items:center;gap:6px;padding:6px 2px}.table-shell .bottom-nav button>svg{grid-row:1;align-self:center;margin:0}.table-shell .bottom-nav .nav-label{grid-row:2;width:100%;min-width:0}}
+
+.table-shell .dialog[aria-labelledby="custom-menu-title"]>p{margin-bottom:24px}
