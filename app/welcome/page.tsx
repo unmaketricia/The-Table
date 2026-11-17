@@ -11,7 +11,7 @@ import {WELCOME_SEEN_KEY} from '@/commercial/onboarding';
 export default function Welcome(){
  const {workspace,ready:themeReady,choosePalette}=useHousehold();
  const [ready,R]=useState(false),[busy,B]=useState(false),[message,M]=useState('');
- const [preview,P]=useState(false),[previewColor,PC]=useState(palettes[1]);
+ const [preview,P]=useState(false),[previewColor,PC]=useState<(typeof palettes)[number]>(palettes[1]);
  const marked=useRef(false),locked=useRef(false);
  const display=preview?previewColor:getTableDisplay(workspace.settings);
  async function markSeen(){
