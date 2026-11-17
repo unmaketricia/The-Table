@@ -2,7 +2,7 @@
 import '../login/login.css';
 import '../account/account.css';
 import './welcome.css';
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useRef,useState,type CSSProperties} from 'react';
 import {authClient} from '@/commercial/auth';
 import {APP_BASE,buyerFetch} from '@/commercial/api';
 import {useHousehold} from '@/commercial/context';
@@ -11,14 +11,16 @@ import {WELCOME_SEEN_KEY} from '@/commercial/onboarding';
 export default function Welcome(){
  const {workspace,ready:themeReady,choosePalette}=useHousehold();
  const [ready,R]=useState(false),[busy,B]=useState(false),[message,M]=useState('');
+ const [preview,P]=useState(false),[previewColor,PC]=useState(palettes[1]);
  const marked=useRef(false),locked=useRef(false);
- const display=getTableDisplay(workspace.settings);
+ const display=preview?previewColor:getTableDisplay(workspace.settings);
  async function markSeen(){
   const client=authClient();if(!client)throw Error('Please sign in again.');
   const {error}=await client.auth.updateUser({data:{[WELCOME_SEEN_KEY]:new Date().toISOString()}});
   if(error)throw error;marked.current=true;
  }
  useEffect(()=>{
+  if(new URLSearchParams(window.location.search).get('preview')==='1'){P(true);R(true);return}
   let active=true;
   void(async()=>{try{
    const client=authClient();const {data}=client?await client.auth.getSession():{data:{session:null}};
@@ -35,16 +37,17 @@ export default function Welcome(){
  },[]);
  async function openTable(){
   if(locked.current)return;locked.current=true;B(true);M('');
-  try{if(!marked.current)await markSeen();window.location.replace(APP_BASE)}
+  try{if(!preview&&!marked.current)await markSeen();window.location.replace(APP_BASE)}
   catch(e){M(e instanceof Error?e.message:'Could not open your Table. Please try again.');locked.current=false;B(false)}
  }
  async function pick(accent:string,surface:string){
+  if(preview){PC(palettes.find(p=>p.accent===accent&&p.surface===surface)||palettes[1]);return}
   if(locked.current||!themeReady)return;locked.current=true;B(true);M('');
   try{if(!await choosePalette(accent,surface))throw Error('Could not save this color. Please try again.');}
   catch(e){M(e instanceof Error?e.message:'Could not save this color.');}
   finally{locked.current=false;B(false)}
  }
- return <main className="login-page account-page welcome-page">
+ return <main className="login-page account-page welcome-page" style={preview?{'--accent':display.accent,'--surface':display.surface} as CSSProperties:undefined}>
   {!ready?<><p role="status">{message||'Getting your Table ready…'}</p>{message&&<button type="button" onClick={()=>location.reload()}>Try again</button>}</>:<>
    <h1>Your Table is ready.</h1>
    <button type="button" className="primary account-continue" disabled={busy} onClick={()=>void openTable()}>Open The Table</button>
@@ -58,7 +61,7 @@ export default function Welcome(){
    </details>
    <section className="welcome-colors" aria-labelledby="welcome-colors-title">
     <h2 id="welcome-colors-title">Choose your color</h2>
-    <div className="welcome-swatches">{palettes.map(p=><button type="button" key={p.name} aria-label={p.name} aria-pressed={display.accent===p.accent&&display.surface===p.surface} disabled={busy||!themeReady} style={{background:p.accent}} onClick={()=>void pick(p.accent,p.surface)}/>)}</div>
+    <div className="welcome-swatches">{palettes.map(p=><button type="button" key={p.name} aria-label={p.name} aria-pressed={display.accent===p.accent&&display.surface===p.surface} disabled={busy||(!preview&&!themeReady)} style={{background:p.accent}} onClick={()=>void pick(p.accent,p.surface)}/>)}</div>
    </section>
    {message&&<p role="alert">{message}</p>}
   </>}
