@@ -83,7 +83,10 @@ h3{font-size:18px;line-height:1.3}
 .slot-dish{font-size:15px;line-height:1.4;overflow-wrap:anywhere}
 .slot-dish em{color:var(--muted);font-style:normal}
 .slot-dish small{display:block;color:var(--muted);white-space:pre-wrap}
-.slot-stock{grid-column:2;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.slot-details{grid-column:2;display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);align-items:start;gap:12px;margin-top:6px;min-width:0;font-size:12px;font-variant-numeric:tabular-nums}
+.slot-ingredient{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+.meal-ingredient,.meal-availability{display:block;width:max-content;max-width:100%;padding:4px 8px;border-radius:6px;background:var(--table-surface);color:var(--ink);font-size:12px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.slot-variant{color:var(--muted);line-height:1.4;overflow-wrap:anywhere;min-width:0}
 .week-hint,.section-note,.reorder-hint{color:var(--muted);font-size:14px}
 .empty{margin:20px 0;padding:28px 20px;border:1px solid var(--line);border-radius:6px;color:var(--muted);text-align:left}
 .empty p{margin:8px 0 16px}
@@ -195,7 +198,7 @@ h1,h2,h3,.brand,.home-section-copy strong{font-family:Kalam,cursive;font-weight:
 .home-section-copy strong{font-size:22px}
 
 
-.brand .brand-name{font-size:32px;font-weight:700;line-height:1;white-space:nowrap;transform:translateY(3px)}
+.table-shell .brand .brand-name{display:block;width:auto;height:auto;background:transparent;color:var(--table-title,var(--ink));border-radius:0;font-size:32px;font-weight:700;line-height:1.2;white-space:nowrap;transform:none}
 @media(max-width:380px){.brand{gap:8px}.brand .brand-name{font-size:29px}.sync{max-width:110px}}
 
 
