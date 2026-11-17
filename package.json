@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit",
     "test:db": "node --experimental-strip-types --test tests/database.test.ts",
     "test:paddle": "node --test tests/paddle-signature.test.mjs",
-    "test:customization": "node --experimental-strip-types --test tests/customization.test.ts tests/inventory.test.ts tests/grocery-order.test.ts tests/meal-swap.test.ts"
+    "test:customization": "node --experimental-strip-types --test tests/customization.test.ts tests/inventory.test.ts tests/grocery-order.test.ts tests/meal-swap.test.ts tests/invitation-email.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

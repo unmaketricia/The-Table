@@ -15,6 +15,11 @@ export default function Login() {
   const resetCooldown = useEmailCooldown(emailCooldownKey('reset', email));
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
+    const pendingInvite=query.get('invite');
+    if(pendingInvite&&/^[a-f0-9]{64}$/.test(pendingInvite)) {
+      try {localStorage.setItem('table-pending-invite',pendingInvite);} catch {}
+      N('You’ve been invited to a household. Sign in or create an account with the invited email address.');
+    }
     const callback = new URLSearchParams(window.location.hash.slice(1));
     const emailChangeFlow = query.get('emailChange') === '1' || callback.get('type') === 'email_change';
     if (query.get('setup') === '1') M('register');
