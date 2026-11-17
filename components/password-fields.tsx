@@ -4,8 +4,8 @@ type Props={mode:'login'|'create';password:string;confirmation:string;onPassword
 export function PasswordFields({mode,password,confirmation,onPassword,onConfirmation,disabled=false,label='Password',maxLength}:Props){
  const id=useId(),[show,S]=useState(false),[showConfirmation,SC]=useState(false),[editing,F]=useState<string|null>(null),[passwordDone,PD]=useState(false),[confirmationDone,CD]=useState(false);
  const create=mode==='create',enough=password.length>=12,matched=!!confirmation&&password===confirmation;
- const passwordError=create&&passwordDone&&!editing&&!enough;
- const confirmationError=create&&confirmationDone&&!editing&&!matched;
+ const passwordError=create&&password.length>0&&passwordDone&&!editing&&!enough;
+ const confirmationError=create&&confirmation.length>0&&confirmationDone&&!editing&&!matched;
  return <div className="password-fields">
   <div className="password-field" onFocus={()=>F('password')} onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget)){F(null);PD(true)}}}>
    <label htmlFor={id+'-password'}>{label}</label>
