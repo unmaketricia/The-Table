@@ -1,3 +1,4 @@
+import {dispatchWelcomes} from "./welcome.mjs";
 import {verifyPaddleSignature} from "./verify.js";
 Deno.serve(async (request: Request) => {
   if(request.method!=="POST") return new Response("Method not allowed",{status:405});
@@ -15,5 +16,15 @@ Deno.serve(async (request: Request) => {
     body:JSON.stringify({p_event:event})
   });
   if(!response.ok){console.error("Purchase provisioning failed",response.status);return new Response("Please retry",{status:500});}
+  if(['transaction.completed','customer.created','customer.updated'].includes(event.event_type)){
+   try{await dispatchWelcomes(rpc,Deno.env.get("RESEND_API_KEY"));}
+   catch(e){console.error("Welcome email delivery pending",e instanceof Error?e.message:'Delivery failed');return new Response("Welcome delivery pending; please retry",{status:503});}
+  }
   return Response.json({received:true});
 });
+
+async function rpc(name:string,body:Record<string,unknown>){
+ const key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+ const r=await fetch(Deno.env.get("SUPABASE_URL")+"/rest/v1/rpc/"+name,{method:"POST",headers:{"Content-Type":"application/json",apikey:key,Authorization:"Bearer "+key},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});
+ if(!r.ok)throw Error('Welcome delivery storage returned '+r.status);const text=await r.text();return text?JSON.parse(text):null;
+}
