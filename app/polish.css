@@ -68,3 +68,9 @@
 
 /* A single mealtime uses the full day row, without a column divider. */
 .table-shell .day-slots>.meal-slot:only-child{grid-column:1 / -1;border-right:0}
+
+/* Keep day headings and meal content distinct, with room for longer meal labels. */
+.table-shell .meal-slot{grid-template-columns:120px minmax(0,1fr);column-gap:24px;padding-top:20px;padding-bottom:20px}
+.table-shell .slot-name{min-width:0;overflow-wrap:anywhere;line-height:1.45}
+.table-shell.density-compact .meal-slot{padding-top:12px;padding-bottom:12px}
+@media(max-width:760px){.table-shell .meal-slot{grid-template-columns:96px minmax(0,1fr);column-gap:16px}}
