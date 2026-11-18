@@ -16,3 +16,10 @@ export function validateSettings(value:unknown):Settings{
 export function readSettings(entry?:{settings?:unknown}):Settings{
  try{return validateSettings(entry?.settings)}catch{return {...defaultSettings,mealSlots:defaultMealSlots.map(s=>({...s})),menuProfiles:[{id:'main',name:'Main Menu'}],tableDisplay:{...defaultTableDisplay,homeSections:[...defaultTableDisplay.homeSections],pins:[...defaultTableDisplay.pins]}};}
 }
+
+// Remove only planned meals belonging to deleted menu profiles or meal times.
+export function mealsRemovedBySettings<T extends {kind:string;favoriteTemplate?:unknown;profileId?:unknown;slotId?:unknown}>(entries:T[],previous:Settings,next:Settings):T[]{
+ const removedMenus=new Set(previous.menuProfiles.filter(p=>p.id!=='main'&&!next.menuProfiles.some(n=>n.id===p.id)).map(p=>p.id));
+ const removedSlots=new Set(previous.mealSlots!.filter(s=>!next.mealSlots!.some(n=>n.id===s.id)).map(s=>s.id));
+ return entries.filter(e=>e.kind==='meal'&&!e.favoriteTemplate&&(removedMenus.has(String(e.profileId||'main'))||removedSlots.has(String(e.slotId||'dinner'))));
+}
