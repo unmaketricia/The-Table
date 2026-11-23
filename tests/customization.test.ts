@@ -1,6 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {validateSettings,readSettings,mealsRemovedBySettings} from '../commercial/settings-validation.ts';
+import {getMenuMealSlots} from '../commercial/settings.ts';
+import {mealConflict} from '../lib/meal-person.ts';
 import {planInventoryChange} from '../lib/inventory.ts';
 test('restores four meal times and preserves requested customization',()=>{const s=readSettings();s.mealSlots=s.mealSlots!.filter(x=>x.id!=='snack');s.mealSlots[0].name='Morning';s.tableDisplay!.accent='#865A70';const saved=validateSettings(s);assert.equal(saved.mealSlots!.length,3);assert.equal(saved.mealSlots![0].name,'Morning');assert.equal(saved.tableDisplay!.accent,'#865A70');});
 test('rejects empty meal times, duplicate slots and excessive navigation',()=>{const s=readSettings();assert.throws(()=>validateSettings({...s,mealSlots:[]}));assert.throws(()=>validateSettings({...s,mealSlots:[s.mealSlots![0],s.mealSlots![0]]}));assert.throws(()=>validateSettings({...s,tableDisplay:{...s.tableDisplay,pins:['weekly','additional','grocery','favorites']}}));});
@@ -24,4 +26,27 @@ test('deleting a menu and meal time selects overlapping meals only once',()=>{
  const previous=readSettings();previous.menuProfiles.push({id:'baby',name:'Baby'});
  const next=validateSettings({...previous,menuProfiles:previous.menuProfiles.slice(0,1),mealSlots:previous.mealSlots!.filter(s=>s.id!=='breakfast')});
  const deleted=mealsRemovedBySettings([{kind:'meal',profileId:'baby',slotId:'breakfast'}],previous,next);assert.equal(deleted.length,1);
+});
+
+test('legacy custom menus keep their mealtimes when main menu times are edited',()=>{
+ const legacy=readSettings();legacy.menuProfiles.push({id:'custom',name:'Custom'});
+ const previous=validateSettings(legacy);const next=validateSettings({...previous,mealSlots:previous.mealSlots!.filter(s=>s.id!=='breakfast')});
+ assert.ok(getMenuMealSlots(next,'custom').some(s=>s.id==='breakfast'));
+ const entries=[{kind:'meal',profileId:'custom',slotId:'breakfast'},{kind:'meal',profileId:'main',slotId:'breakfast'}];
+ assert.deepEqual(mealsRemovedBySettings(entries,previous,next),[entries[1]]);
+});
+test('custom mealtime removal releases only that menus allocations',()=>{
+ const s=readSettings();s.menuProfiles.push({id:'custom',name:'Custom'},{id:'other',name:'Other'});const previous=validateSettings(s);
+ const next=validateSettings({...previous,menuProfiles:previous.menuProfiles.map(p=>p.id==='custom'?{...p,mealSlots:p.mealSlots!.filter(s=>s.id!=='breakfast')}:p)});
+ const entries=[{id:'stock',kind:'inventory',stock:1,meat:'Beans',cut:'Cooked',stockVersion:0},{id:'a',kind:'meal',profileId:'custom',slotId:'breakfast',date:'2026-11-23',inventoryId:'stock',inventoryQuantity:1,child:'Person A'},{id:'b',kind:'meal',profileId:'other',slotId:'breakfast',date:'2026-11-23',inventoryId:'stock',inventoryQuantity:1}];
+ const deleted=mealsRemovedBySettings(entries,previous,next);assert.deepEqual(deleted.map(e=>e.id),['a']);const plan=planInventoryChange(entries,deleted,'delete');assert.equal(plan.entries.find(e=>e.id==='stock')!.stock,2);assert.ok(plan.entries.some(e=>e.id==='b'));
+ assert.throws(()=>validateSettings({...previous,menuProfiles:previous.menuProfiles.map(p=>p.id==='custom'?{...p,mealSlots:[]}:p)}));
+});
+test('different names can have different meals at the same custom mealtime',()=>{
+ const first={id:'a',kind:'meal',profileId:'custom',slotId:'lunch',date:'2026-11-23',child:'Person A'};
+ assert.equal(mealConflict([first],{...first,id:'b',child:'Person B'}),undefined);
+ assert.equal(mealConflict([first],{...first,id:'b',child:' person a '}),first);
+ assert.equal(mealConflict([first],first),undefined);
+ assert.ok(mealConflict([{...first,child:''}],{...first,id:'b',child:' '}));
+ assert.ok(mealConflict([{...first,profileId:'main'}],{...first,id:'b',profileId:'main',child:'Person B'}));
 });

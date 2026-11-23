@@ -74,3 +74,7 @@
 .table-shell .slot-name{min-width:0;overflow-wrap:anywhere;line-height:1.45}
 .table-shell.density-compact .meal-slot{padding-top:12px;padding-bottom:12px}
 @media(max-width:760px){.table-shell .meal-slot{grid-template-columns:96px minmax(0,1fr);column-gap:16px}}
+
+.table-shell .meal-person{display:block;margin-top:6px;font-size:12px;line-height:1.4;font-weight:400;overflow-wrap:anywhere;color:var(--muted)}
+.custom-slot-group{min-width:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.custom-slot-group:nth-child(even){border-right:0}.custom-slot-group:only-child{grid-column:1/-1;border-right:0}.table-shell .custom-slot-group>.meal-slot{border-right:0}.table-shell .add-person-meal{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:12px 16px;border:0;border-radius:0;background:transparent;text-align:left;font-size:13px;color:var(--table-title)}
+@media(max-width:760px){.custom-slot-group{border-right:0}}

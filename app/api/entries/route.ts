@@ -1,3 +1,5 @@
+import {getMenuMealSlots} from '@/commercial/settings';
+import {mealConflict} from '@/lib/meal-person';
 import {buyerIdentity,buyerRpc,buyerFailure,BuyerError} from '@/commercial/server';
 import {InventoryError,planInventoryChange,type Entry} from '@/lib/inventory';
 import {SETTINGS_ID,readSettings,validateSettings,mealsRemovedBySettings} from '@/commercial/settings-validation';
@@ -29,6 +31,7 @@ export async function POST(request:Request){
   if(body.revision!==undefined&&body.revision!==snapshot.revision)throw new BuyerError('Your household changed in another window. Refresh and try again.',409);
   if(action==='save'){const settings=readSettings(stored);for(const item of items)if(item.kind==='meal'&&!item.favoriteTemplate&&!settings.menuProfiles.some(p=>p.id===(item.profileId||'main')))throw new BuyerError('This menu was removed. Refresh and choose another menu.',409);}
   let plan;try{plan=planInventoryChange(snapshot.entries,items,action as 'save'|'delete')}catch(e){if(e instanceof InventoryError)throw new BuyerError(e.message,409);throw e}
+  if(action==='save'){const settings=readSettings(stored);for(const item of items){if(item.kind!=='meal'||item.favoriteTemplate)continue;if(item.child!==undefined&&(typeof item.child!=='string'||item.child.length>80))throw new BuyerError('Enter a name of up to 80 characters.');if(!getMenuMealSlots(settings,String(item.profileId||'main')).some(s=>s.id===(item.slotId||'dinner')))throw new BuyerError('This mealtime was removed. Refresh and choose another.',409);if(mealConflict(plan.entries,item))throw new BuyerError('A meal is already planned for this person, date, and mealtime.',409);}}
   await buyerRpc(token,'table_apply',{p_household:account.householdId,p_revision:snapshot.revision,p_changed:plan.changed,p_deleted:plan.deleted.map(e=>e.id)});
   return Response.json({ok:true,entries:plan.entries,revision:Number(snapshot.revision)+1},{headers:{'Cache-Control':'no-store'}});
  }catch(e){return buyerFailure(e)}

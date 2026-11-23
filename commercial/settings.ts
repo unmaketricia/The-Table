@@ -12,7 +12,8 @@ export const palettes=[
 export type TableDisplay={accent:string;surface:string;density:'comfortable'|'compact';homeSections:TableArea[];pins:TableArea[]};
 export const defaultTableDisplay:TableDisplay={accent:'#2F4156',surface:'#F5EFEB',density:'comfortable',homeSections:['weekly','additional','grocery'],pins:['weekly','grocery','favorites']};
 export const defaultMealSlots=[{id:'breakfast',name:'Breakfast'},{id:'lunch',name:'Lunch'},{id:'dinner',name:'Dinner'},{id:'snack',name:'Snack'}];
-export type Settings={name:string;children:string[];menuProfiles:{id:string;name:string}[];mealSlots?:{id:string;name:string}[];todayLabel:string;currency:'USD'|'PHP';weekStart:number;timezone:string;tableDisplay?:TableDisplay};
+export type MealSlot={id:string;name:string};
+export type Settings={name:string;children:string[];menuProfiles:{id:string;name:string;mealSlots?:MealSlot[]}[];mealSlots?:MealSlot[];todayLabel:string;currency:'USD'|'PHP';weekStart:number;timezone:string;tableDisplay?:TableDisplay};
 export const defaultSettings:Settings={name:'My household',children:[],menuProfiles:[{id:'main',name:'Main Menu'}],mealSlots:defaultMealSlots,todayLabel:"Today's Menu",currency:'USD',weekStart:1,timezone:'America/New_York',tableDisplay:defaultTableDisplay};
 export function getTableDisplay(settings:Settings):TableDisplay{
  const value=settings.tableDisplay;
@@ -38,3 +39,5 @@ export function accessibleAccent(hex:string){
 export let budgetSettings:Settings={...defaultSettings};
 export function configureSettings(settings:Settings){budgetSettings={...settings};}
 export function householdToday(date=new Date()){return new Intl.DateTimeFormat('en-CA',{timeZone:budgetSettings.timezone,year:'numeric',month:'2-digit',day:'2-digit'}).format(date);}
+
+export function getMenuMealSlots(settings:Settings,menuId='main'):MealSlot[]{return (menuId==='main'?settings.mealSlots:settings.menuProfiles.find(p=>p.id===menuId)?.mealSlots)||settings.mealSlots||defaultMealSlots;}

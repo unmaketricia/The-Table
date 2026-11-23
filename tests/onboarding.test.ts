@@ -16,12 +16,13 @@ test('choosing a welcome color preserves custom menus, meal times, and navigatio
  current.menuProfiles.push({id:'vegan',name:'Vegan'});
  current.mealSlots=[{id:'dinner',name:'Evening meal'}];
  current.tableDisplay!.pins=['inventory','grocery'];
- const before=structuredClone(current);
+ const raw=structuredClone(current);
+ const before=validateSettings(current);
  const updated=validateSettings({...current,tableDisplay:{...getTableDisplay(current),accent:'#865A70',surface:'#F5EBF0'}});
  assert.deepEqual(updated.menuProfiles,before.menuProfiles);
  assert.deepEqual(updated.mealSlots,before.mealSlots);
  assert.deepEqual(updated.tableDisplay!.pins,before.tableDisplay!.pins);
  assert.deepEqual(updated.tableDisplay!.homeSections,before.tableDisplay!.homeSections);
  assert.equal(updated.tableDisplay!.accent,'#865A70');
- assert.deepEqual(current,before);
+ assert.deepEqual(current,raw);
 });
