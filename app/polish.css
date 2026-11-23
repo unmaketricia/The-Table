@@ -1,0 +1,82 @@
+/* Quiet, theme-aware surfaces and controls shared with the studio website. */
+.table-shell{--paper:#fff;background:var(--paper)}
+.table-shell button,.table-shell .account-continue{font-size:14px;font-weight:500;box-shadow:none}
+.table-shell button:not(.primary):not(.grocery-fab){border-color:var(--line)}
+.table-shell button.primary,.table-shell .account-continue{border-radius:999px;padding:12px 22px;font-weight:600;text-decoration:none;min-height:46px;background:var(--table-accent);color:var(--table-accent-ink);border-color:var(--table-accent)}
+.table-shell input:not([type=checkbox]):not([type=color]),.table-shell select,.table-shell textarea{border-radius:8px;border-color:var(--line);font-weight:400;background:white}
+.table-shell input::placeholder{color:var(--muted);font-weight:400;opacity:.8}
+.table-shell label{font-weight:500}
+.table-shell h1,.table-shell h2,.table-shell h3{color:var(--table-title)}
+.table-shell .dialog{border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 40px #00000012;padding:28px}
+.table-shell .overlay{background:#17232e50}
+.table-shell .dialog-top button,.table-shell .back{color:var(--muted);background:transparent}
+.table-shell .today-menu{border:0;border-radius:16px;padding:24px;max-width:none;margin-bottom:28px}
+.table-shell .today-menu h2{color:var(--table-accent-ink)}
+.table-shell .dashboard{max-width:none;border-top:0;gap:0}
+.table-shell .home-section{padding:18px 4px;min-height:84px}
+.table-shell .home-section-copy{gap:3px}
+.table-shell .home-section-copy strong{font-size:24px}
+.table-shell .home-section-icon{color:var(--table-title)}
+.table-shell .today-meal{font-weight:400;min-height:28px;line-height:1.2;padding-top:4px;padding-bottom:4px}
+.table-shell .week-bar{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;border-radius:12px;padding:16px;background:var(--table-surface)}
+.table-shell .week-bar>strong{font-size:15px;line-height:1.4;text-align:left}
+.table-shell .week-bar .week-navigation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.table-shell .week-bar .week-navigation button{min-width:0;min-height:44px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:10px 6px;color:var(--table-title);font-size:14px;font-weight:500;line-height:1.2;white-space:nowrap}
+.table-shell .week-bar .week-navigation button[aria-current=date]{background:var(--table-accent);color:var(--table-accent-ink);border-color:var(--table-accent)}
+.table-shell .week-bar .week-navigation button:hover{filter:brightness(.97)}
+@media(max-width:760px){.table-shell .week-bar .week-navigation button{font-size:clamp(11px,3vw,14px);padding:10px 4px}.table-shell .week-bar{padding:14px 12px}}
+.table-shell .week-list,.table-shell .inventory-list,.table-shell .grocery-list{border-radius:12px}
+.table-shell .day-heading{font-weight:500}
+.table-shell .meal-slot{padding-top:12px;padding-bottom:12px}
+.table-shell .bottom-nav button{font-weight:400;background:white;border:0}
+.table-shell .bottom-nav button.active{color:var(--table-title);font-weight:600;box-shadow:inset 0 -2px var(--table-accent)}
+.table-shell .appearance-toolbar{display:flex;justify-content:flex-end;align-items:center;gap:10px;max-width:1124px;margin:auto;padding:12px 24px;border-bottom:1px solid var(--line)}
+.table-shell .appearance-toolbar button,.table-shell .appearance-toolbar a{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--table-title);text-decoration:none;font-size:14px;font-weight:500}
+.table-shell .appearance-toolbar button:hover,.table-shell .appearance-toolbar a:hover{background:var(--table-surface)}
+.table-shell .customization-dialog{width:min(720px,100%)}
+.customization-dialog>section{border-top:1px solid var(--line);padding:24px 0}
+.customization-dialog>section>h3{font-family:Kalam,cursive;font-size:25px;margin-bottom:16px}
+.customization-dialog>section>label{margin-top:16px}
+.customization-dialog .palette-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.customization-dialog .palette-option{display:flex;align-items:center;gap:10px;border-radius:10px;padding:12px;text-align:left}
+.customization-dialog .palette-option[aria-pressed=true]{outline:2px solid var(--table-title);outline-offset:-2px;border-width:1px}
+.palette-swatch{width:22px;height:22px;border-radius:50%;border:1px solid #0002;flex:none}
+.customization-dialog .custom-color{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.customization-dialog .custom-color input{margin:0}
+.customization-dialog .setting-columns fieldset{border-radius:10px;min-width:0;padding:14px}
+.customization-dialog .setting-columns label{font-size:14px;line-height:1.3}
+.customization-actions{display:flex;justify-content:flex-end;gap:12px;padding-top:20px;border-top:1px solid var(--line);position:sticky;bottom:-28px;background:white;padding-bottom:16px}
+.table-shell .customization-error{max-width:720px;margin:24px auto;padding:16px;color:var(--muted)}
+.table-shell main.login-page{max-width:440px}
+.table-shell main.account-page{max-width:560px;text-align:center}
+.account-page .account-secondary{border-radius:999px;background:transparent;color:var(--table-title);font-weight:500}
+.table-shell .account-page .install-details summary{border-radius:999px;font-weight:500;background:transparent;color:var(--table-title)}
+.account-page .account-security{margin-top:12px}
+.account-page .account-security form{display:grid;gap:16px}
+.account-page #household-heading{margin-bottom:4px;line-height:1.2}
+.account-page #household-heading+p{margin-top:0;line-height:1.2}
+.table-shell .login-page .auth-links button{border:0;background:transparent;color:var(--table-title)}
+.table-shell .density-compact .meal-slot{min-height:48px;padding-top:6px;padding-bottom:6px}
+@media(max-width:760px){.table-shell .appearance-toolbar{padding:10px 16px}.table-shell .appearance-toolbar button,.table-shell .appearance-toolbar a{padding:9px 14px}.table-shell .today-menu{padding:18px}.table-shell .dialog{padding:20px}.customization-actions{bottom:-20px}.customization-dialog .palette-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.table-shell .home-section{padding:16px 0}.table-shell .home-section-copy strong{font-size:22px}}
+
+.bottom-nav .nav-label{display:block;line-height:1.2;text-align:center}
+@media(max-width:760px){.table-shell .bottom-nav button{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:20px minmax(2.4em,auto);align-content:start;align-items:start;justify-items:center;gap:6px;padding:6px 2px}.table-shell .bottom-nav button>svg{grid-row:1;align-self:center;margin:0}.table-shell .bottom-nav .nav-label{grid-row:2;width:100%;min-width:0}}
+
+.table-shell .dialog[aria-labelledby="custom-menu-title"]>p{margin-bottom:24px}
+
+.custom-menu-controls{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:20px}.custom-menu-controls .menu-profile-select{flex:1;min-width:180px;margin-bottom:0}.table-shell .delete-custom-menu{min-height:44px;padding:10px 16px;border:1px solid var(--line);background:transparent;color:var(--ink);white-space:nowrap}
+
+/* A single mealtime uses the full day row, without a column divider. */
+.table-shell .day-slots>.meal-slot:only-child{grid-column:1 / -1;border-right:0}
+
+/* Keep day headings and meal content distinct, with room for longer meal labels. */
+.table-shell .meal-slot{grid-template-columns:120px minmax(0,1fr);column-gap:24px;padding-top:20px;padding-bottom:20px}
+.table-shell .slot-name{min-width:0;overflow-wrap:anywhere;line-height:1.45}
+.table-shell.density-compact .meal-slot{padding-top:12px;padding-bottom:12px}
+@media(max-width:760px){.table-shell .meal-slot{grid-template-columns:96px minmax(0,1fr);column-gap:16px}}
+
+.table-shell .meal-person{display:block;margin-top:6px;font-size:12px;line-height:1.4;font-weight:400;overflow-wrap:anywhere;color:var(--muted)}
+.custom-slot-group{min-width:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.custom-slot-group:nth-child(even){border-right:0}.custom-slot-group:only-child{grid-column:1/-1;border-right:0}.table-shell .custom-slot-group>.meal-slot{border-right:0}.table-shell .add-person-meal{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:12px 16px;border:0;border-radius:0;background:transparent;text-align:left;font-size:13px;color:var(--table-title)}
+@media(max-width:760px){.custom-slot-group{border-right:0}}
+
+.table-shell .app-update-notice{display:grid;gap:16px;margin:0 0 28px;padding:20px;border:1px solid var(--line);border-left:4px solid var(--table-accent);border-radius:10px;background:var(--table-surface)}.app-update-notice strong{font-size:18px}.app-update-notice p{font-size:14px;line-height:1.6;margin:10px 0 0}.app-update-notice .actions{flex-wrap:wrap}.app-update-notice button{min-height:44px}

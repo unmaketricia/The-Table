@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {webcrypto,createHmac} from 'node:crypto';
+import {verifyPaddleSignature} from '../supabase/functions/table-paddle/verify.js';
+if(!globalThis.crypto)Object.defineProperty(globalThis,'crypto',{value:webcrypto});
+const raw='{"event_id":"evt_example"}',secret='test-secret',now=1700000000;
+const sign=(body=raw,ts=now)=>'ts='+ts+';h1='+createHmac('sha256',secret).update(ts+':'+body).digest('hex');
+test('accepts the signed raw payload',async()=>assert.equal(await verifyPaddleSignature(raw,sign(),secret,now),true));
+test('rejects changed payload and wrong secret',async()=>{assert.equal(await verifyPaddleSignature(raw+' ',sign(),secret,now),false);assert.equal(await verifyPaddleSignature(raw,sign(),'wrong',now),false)});
+test('rejects expired and future replay timestamps',async()=>{assert.equal(await verifyPaddleSignature(raw,sign(raw,now-6),secret,now),false);assert.equal(await verifyPaddleSignature(raw,sign(raw,now+6),secret,now),false)});
+test('rejects missing and malformed signatures',async()=>{for(const header of [null,'','ts=x;h1=abc','ts='+now+';h1=xyz'])assert.equal(await verifyPaddleSignature(raw,header,secret,now),false)});
+test('supports multiple signatures for key rotation',async()=>assert.equal(await verifyPaddleSignature(raw,'ts='+now+';h1='+'0'.repeat(64)+';'+sign().split(';')[1],secret,now),true));
