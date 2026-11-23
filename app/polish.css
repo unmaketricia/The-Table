@@ -78,3 +78,5 @@
 .table-shell .meal-person{display:block;margin-top:6px;font-size:12px;line-height:1.4;font-weight:400;overflow-wrap:anywhere;color:var(--muted)}
 .custom-slot-group{min-width:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.custom-slot-group:nth-child(even){border-right:0}.custom-slot-group:only-child{grid-column:1/-1;border-right:0}.table-shell .custom-slot-group>.meal-slot{border-right:0}.table-shell .add-person-meal{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:12px 16px;border:0;border-radius:0;background:transparent;text-align:left;font-size:13px;color:var(--table-title)}
 @media(max-width:760px){.custom-slot-group{border-right:0}}
+
+.table-shell .app-update-notice{display:grid;gap:16px;margin:0 0 28px;padding:20px;border:1px solid var(--line);border-left:4px solid var(--table-accent);border-radius:10px;background:var(--table-surface)}.app-update-notice strong{font-size:18px}.app-update-notice p{font-size:14px;line-height:1.6;margin:10px 0 0}.app-update-notice .actions{flex-wrap:wrap}.app-update-notice button{min-height:44px}
